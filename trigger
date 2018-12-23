@@ -44,7 +44,41 @@ begin
 end;
 
 --3.数据库的审计（跟踪表上的数据操作）（基于值的审计）
---4.数据的备份和同步
+--给员工涨工资，当涨后的薪水超过6000块钱的时候，审计该员工的信息
+--创建表用于保存审计信息
+create table audit_info
+(
+  information varchar2(200)
+);
+create or replace trigger do_audit_emp_salary
+after update
+on emp
+for each row
+begin
+  if 
+    :new.sal > 6000 then
+    insert into audit_info values(:new.enmno||'  '||:new.ename||'  '||:new.sal);
+  end if;
+end;
+
+
+--4.数据的备份和同步(同步备份)
+--当给员工涨完工资后，自动备份新的工资到备份表中
+create or replace trigger sync_salary
+after update
+on emp
+for each row
+begin
+  update emp_bak set sal=:new where empno=:new.empno;
+end;
+
+
+
+
+
+
+
+
 
 
 
