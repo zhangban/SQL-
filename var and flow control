@@ -82,3 +82,37 @@
 	--游标取值:      fetch 游标名 into 变量列表;
 	--游标关闭:      close 游标名;
 	--游标的属性
+	
+	--使用游标查询emp表中所有员工的姓名和工资，并将其依次打印出来
+	declare
+		cursor c_emp is select ename,sal from emp; --游标里放的是一大坨ename和sal
+		--声明变量接收游标中的数据
+		v_ename emp.ename%type;
+		v_sal emp.sal%type;
+		
+	begin
+		open c_emp;
+		loop
+			fetch c_emp into v_ename,v_sal;
+		exit when c_emp%notfound;
+		 	dbms_output.put_line(v_ename||v_sal)；
+		end loop;
+		close c_emp;
+	end;
+	--使用游标查询某部门员工的姓名和工资，并将其依次打印出来。
+	declare
+		cursor c_emp(v_deptno emp.deptno%type) is select ename,sal from emp where deptno = v_deptno;
+		v_ename emp.ename%type;
+		v_sal emp.sal%type;
+	begin
+		open c_emp(10);--参数在打开的时候进行传递
+		 loop
+		 	fetch c_emp into v_ename,v_sal;
+		 exit when c_emp%notfound;
+		 	dbms_output.put_line(v_ename||v_sal);
+		 end loop;
+		close c_emp;
+	
+	end;
+	
+	
