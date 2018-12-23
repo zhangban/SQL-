@@ -1,0 +1,88 @@
+--普通变量:char,varchar2,date,number,boolean,long
+--引用型变量
+--记录型变量
+--游标（结果集）
+
+declare
+  v_name varchar2(20) := 'zhangsanfeng';  
+  v_sal number(6,2);                       --6 is total length ,2 is decimal place,such as 1000.00
+  v_addr varchar2(200);  
+begin
+  v_sal := 9000.00;
+  select '西城区菜市口' into v_addr from dual;
+  dbms_output.put_line('zhangban'||v_addr);       --single quotation marks
+end;
+
+
+
+--引用型变量 such as v_name emp.ename%type
+--查询7839号员工的个人信息，打印姓名和薪水
+declare 
+  v_name emp.ename%type;
+  v_sal emp.sal%type;
+begin
+  select ename,sal from emp into v_name,v_sal where empno = '7839';
+  dbms_output.put_line(v_name||v_sal);
+end;
+
+
+--记录型变量:接收的数据是表中的一整行记录    v_emp emp%rowtype;
+--查询并打印7839号员工的姓名和薪水
+declare
+  v_emp emp%rowtype;
+begin
+  select * into v_emp from emp where empno = 7839;
+  dbms_output.put_line(v_emp.ename||v_emp.sal);
+end;
+
+--流程控制
+begin
+  if 条件1 then 执行1
+   elsif 条件2 then 执行2
+   else 执行3
+  end if;
+end;
+
+--判断emp表中记录是否超过20条，10-20之间，或者10条以下
+declare
+  v_count number;
+begin
+ select count(1) into from emp;
+ if v_count > 20 then dbms_output.put_line('记录数为'||v_count);
+  elsif v_count v_count >= 10 then  dbms_output.put_line('记录数为'||v_count);
+  else 
+    dbms_output.put_line('记录数为'||v_count);
+ end if;
+end;
+
+--loop循环
+begin
+  loop
+    exit when 退出循环条件
+  end loop;
+end;
+
+--打印1-10
+declare
+ v_num number := 1;
+begin
+  loop
+  exit when v_num >= 11
+  dbms_output.put_line(v_num);
+  v_num := v_num +1;
+  end loop;
+end;
+
+--游标（结果集）
+--临时存储一个查询返回的多行数据（结果集，类似于Java的jdbc连接返回的ResultSet集合），通过遍历游标，可以逐行访问处理该结果集的数据
+--声明-->打开-->读取-->关闭
+--游标语法
+--游标声明：      cursor 游标名[(参数列表)]  is 查询语句;
+--游标的打开:     open 游标名;
+--游标取值:      fetch 游标名 into 变量列表;
+--游标关闭:      close 游标名;
+--游标的属性
+
+
+
+
