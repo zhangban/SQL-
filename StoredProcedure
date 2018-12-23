@@ -1,0 +1,28 @@
+--查询某个员工的（如7839号员工）的姓名，和薪水--存储过程：要求调用的时候传入员工编号，自动控制台打印，
+
+create or replace procedure p_zhangban(i_empno in emp.empno%type) is         --也可无参数直接一个过程名
+  v_ename emp.ename%type;
+  v_sal emp.sal%type;
+begin
+  select ename,sal into v_ename,v_sal from emp where empno = i_empno;
+  dbms_output.put_line(v_ename||v_sal);
+end p_zhangban;       --调用：p_zhangban(7839)
+
+--带输出参数的stored procedure通常输出参数被其他程序调用
+--输入员工编号查询某个员工（7839），将薪水作为返回值输出，给调用的程序使用
+create or replace procedure p_querynameandsal(i_empno in emp.empno%type,o_sal out emp.sal%type) as
+  v_ename emp.ename%type;
+  v_sal emp.sal%type;
+begin
+  select ename,sal into v_ename,v_sal from emp where empno = i_empno;
+end;
+
+--调用
+declare
+  v_sal emp.sal%type; 
+begin
+  p_querynameandsal(7839,v_sal);
+  dbms_output.put_line(v_sal);
+end;
+
+
